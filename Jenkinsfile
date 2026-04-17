@@ -35,35 +35,20 @@ pipeline {
             steps {
                 withSonarQubeEnv('SonarQube') {
 
-                    // User Service (MAIN)
-                    dir('user-service') {
-                        bat '''
-                        mvn clean verify sonar:sonar ^
-                        -Dsonar.projectKey=user-service ^
-                        -Dsonar.projectName=user-service
-                        -Dsonar.login=squ_83d8a3b35afd137bd1aec0360786728d7d144cbb
-                        '''
-                    }
+                    // ✅ User Service
+                                       dir('user-service') {
+                                           bat "mvn clean verify sonar:sonar -Dsonar.projectKey=user-service -Dsonar.projectName=user-service -Dsonar.login=squ_83d8a3b35afd137bd1aec0360786728d7d144cbb"
+                                       }
 
-                    // API Gateway
-                    dir('api-gateway-service') {
-                        bat '''
-                        mvn clean verify sonar:sonar ^
-                        -Dsonar.projectKey=api-gateway-service ^
-                        -Dsonar.projectName=api-gateway-service
-                        -Dsonar.login=squ_83d8a3b35afd137bd1aec0360786728d7d144cbb
-                        '''
-                    }
+                                       // ✅ API Gateway
+                                       dir('api-gateway-service') {
+                                           bat "mvn clean verify sonar:sonar -Dsonar.projectKey=api-gateway-service -Dsonar.projectName=api-gateway-service -Dsonar.login=squ_83d8a3b35afd137bd1aec0360786728d7d144cbb"
+                                       }
 
-                    // Eureka Server
-                    dir('eureka-server') {
-                        bat '''
-                        mvn clean verify sonar:sonar ^
-                        -Dsonar.projectKey=eureka-server ^
-                        -Dsonar.projectName=eureka-server
-                        -Dsonar.login=squ_83d8a3b35afd137bd1aec0360786728d7d144cbb
-                        '''
-                    }
+                                       // ✅ Eureka Server
+                                       dir('eureka-server') {
+                                           bat "mvn clean verify sonar:sonar -Dsonar.projectKey=eureka-server -Dsonar.projectName=eureka-server -Dsonar.login=squ_83d8a3b35afd137bd1aec0360786728d7d144cbb"
+                                       }
                 }
             }
         }
