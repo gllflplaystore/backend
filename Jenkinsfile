@@ -41,6 +41,7 @@ pipeline {
                         mvn clean verify sonar:sonar ^
                         -Dsonar.projectKey=user-service ^
                         -Dsonar.projectName=user-service
+                        -Dsonar.login=squ_83d8a3b35afd137bd1aec0360786728d7d144cbb
                         '''
                     }
 
@@ -50,6 +51,7 @@ pipeline {
                         mvn clean verify sonar:sonar ^
                         -Dsonar.projectKey=api-gateway-service ^
                         -Dsonar.projectName=api-gateway-service
+                        -Dsonar.login=squ_83d8a3b35afd137bd1aec0360786728d7d144cbb
                         '''
                     }
 
@@ -59,6 +61,7 @@ pipeline {
                         mvn clean verify sonar:sonar ^
                         -Dsonar.projectKey=eureka-server ^
                         -Dsonar.projectName=eureka-server
+                        -Dsonar.login=squ_83d8a3b35afd137bd1aec0360786728d7d144cbb
                         '''
                     }
                 }
