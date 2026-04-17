@@ -3,7 +3,7 @@ pipeline {
 
     tools {
         jdk 'JDK-21'
-        maven 'Maven-3.9.12'
+        maven 'Maven-4.0.0'
     }
 
     environment {
@@ -34,15 +34,49 @@ pipeline {
         stage('SonarQube Analysis') {
             steps {
                 withSonarQubeEnv('SonarQube') {
-                    bat '''
-                    mvn clean verify ^
-                    org.sonarsource.scanner.maven:sonar-maven-plugin:3.9.1.2184:sonar ^
-                    -Dsonar.projectKey=zivdah-api ^
-                    -Dsonar.projectName=zivdah-api
-                    '''
+
+                    // User Service (MAIN)
+                    dir('user-service') {
+                        bat '''
+                        mvn clean verify sonar:sonar ^
+                        -Dsonar.projectKey=user-service ^
+                        -Dsonar.projectName=user-service
+                        '''
+                    }
+
+                    // API Gateway
+                    dir('api-gateway-service') {
+                        bat '''
+                        mvn clean verify sonar:sonar ^
+                        -Dsonar.projectKey=api-gateway-service ^
+                        -Dsonar.projectName=api-gateway-service
+                        '''
+                    }
+
+                    // Eureka Server
+                    dir('eureka-server') {
+                        bat '''
+                        mvn clean verify sonar:sonar ^
+                        -Dsonar.projectKey=eureka-server ^
+                        -Dsonar.projectName=eureka-server
+                        '''
+                    }
                 }
             }
         }
+
+//         stage('SonarQube Analysis') {
+//             steps {
+//                 withSonarQubeEnv('SonarQube') {
+//                     bat '''
+//                     mvn clean verify ^
+//                     org.sonarsource.scanner.maven:sonar-maven-plugin:3.9.1.2184:sonar ^
+//                     -Dsonar.projectKey=zivdah-api ^
+//                     -Dsonar.projectName=zivdah-api
+//                     '''
+//                 }
+//             }
+//         }
 
         stage('Quality Gate') {
              steps {
