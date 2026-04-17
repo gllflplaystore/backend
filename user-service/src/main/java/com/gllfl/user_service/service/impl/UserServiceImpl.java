@@ -1,4 +1,4 @@
-package com.gllfl.user_service.serviceImpl;
+package com.gllfl.user_service.service.impl;
 
 import com.gllfl.user_service.dto.UserRequest;
 import com.gllfl.user_service.entity.User;
