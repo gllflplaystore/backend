@@ -1,5 +1,6 @@
 package com.gllfl.user_service.security;
 
+import com.gllfl.user_service.exception.JwtConfigurationException;
 import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -22,7 +23,7 @@ public class JwtTokenProvider {
             @Value("${jwt.expiration}") long expirationMs
     ) {
         if (secretKey == null || secretKey.isEmpty()) {
-            throw new RuntimeException("JWT secret key is missing!");
+            throw new JwtConfigurationException("JWT secret key is missing!");
         }
 
         this.key = Keys.hmacShaKeyFor(secretKey.getBytes(StandardCharsets.UTF_8));
