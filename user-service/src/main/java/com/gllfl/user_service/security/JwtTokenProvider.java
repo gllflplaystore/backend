@@ -1,10 +1,10 @@
 package com.gllfl.user_service.security;
 
-
 import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import java.nio.charset.StandardCharsets;
@@ -14,25 +14,33 @@ import java.util.Date;
 @Component
 public class JwtTokenProvider {
 
-    private final String SECRET_KEY = "my_super_secret_key_that_is_at_least_32_chars";
-    private final long EXPIRATION_MS = 24 * 60 * 60 * 1000; // 1 day
+    private final Key key;
+    private final long expirationMs;
 
-    private final Key key = Keys.hmacShaKeyFor(SECRET_KEY.getBytes(StandardCharsets.UTF_8));
+    public JwtTokenProvider(
+            @Value("${jwt.secret}") String secretKey,
+            @Value("${jwt.expiration}") long expirationMs
+    ) {
+        if (secretKey == null || secretKey.isEmpty()) {
+            throw new RuntimeException("JWT secret key is missing!");
+        }
 
-    // Generate token using mobile number
+        this.key = Keys.hmacShaKeyFor(secretKey.getBytes(StandardCharsets.UTF_8));
+        this.expirationMs = expirationMs;
+    }
+
     public String generateToken(String mobileNumber) {
         Date now = new Date();
-        Date expiryDate = new Date(now.getTime() + EXPIRATION_MS);
+        Date expiryDate = new Date(now.getTime() + expirationMs);
 
         return Jwts.builder()
-                .setSubject(mobileNumber)           // mobile number as subject
+                .setSubject(mobileNumber)
                 .setIssuedAt(now)
                 .setExpiration(expiryDate)
                 .signWith(key, SignatureAlgorithm.HS256)
                 .compact();
     }
 
-    // Validate token
     public boolean validateToken(String token) {
         try {
             Jwts.parserBuilder()
@@ -45,7 +53,6 @@ public class JwtTokenProvider {
         }
     }
 
-    // Extract mobile number from token
     public String getMobileNumberFromToken(String token) {
         return Jwts.parserBuilder()
                 .setSigningKey(key)
