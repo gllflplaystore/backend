@@ -30,7 +30,6 @@ public class UserServiceImpl implements UserService {
     public Flux<User> getAllUsers() {
         return userRepository.findAll();
     }
-
     @Override
     public Mono<User> getUserById(Long id) {
         return userRepository.findById(id);
